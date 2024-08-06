@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - GINCANA 2024</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>GINCANA 2024<br>ORGANIZADO POR: GRÊMIO ESTUDANTIL VOZ ATIVA E COLEGIO ESTADUAL COSTA E SILVA</h1>
+    <h2>Administração de Chamadas</h2>
+    <button id="refreshButton">Atualizar Lista</button>
+    <table id="attendanceTable">
+        <thead>
+            <tr>
+                <th>Nome do Estudante</th>
+                <th>Time</th>
+                <th>Data e Hora</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- As linhas da tabela serão inseridas aqui via JavaScript -->
+        </tbody>
+    </table>
+
+    <script>
+        document.getElementById('refreshButton').addEventListener('click', function() {
+            fetch('/get_attendance')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#attendanceTable tbody');
+                    tableBody.innerHTML = ''; // Limpa as linhas existentes
+                    data.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${item.studentName}</td>
+                            <td>${item.team}</td>
+                            <td>${item.timestamp}</td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+                });
+        });
+
+        // Atualizar lista ao carregar a página
+        document.getElementById('refreshButton').click();
+    </script>
+</body>
+</html>
